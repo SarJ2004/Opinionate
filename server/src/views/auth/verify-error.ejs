@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<%- include('../partials/head') %>
+
+    <body style="margin: 0; padding: 0; font-family: Arial, sans-serif;">
+        <table width="100%" cellpadding="0" cellspacing="0" style="background-color: #f4f4f4; min-height: 100vh;">
+            <tr>
+                <td align="center">
+                    <table width="600" cellpadding="0" cellspacing="0"
+                        style="background-color: #ffffff; border-radius: 10px; overflow: hidden; margin: 40px auto;">
+
+                        <!-- Header -->
+                        <tr style="background-color: #dc3545;">
+                            <td style="padding: 20px; text-align: center; color: white; font-size: 24px;">
+                                Email Verification <strong>Failed</strong>
+                            </td>
+                        </tr>
+
+                        <!-- SVG Illustration -->
+                        <tr>
+                            <td style="text-align: center; padding: 30px;">
+                                <svg width="150" height="150" viewBox="0 0 24 24" fill="none">
+                                    <circle cx="12" cy="12" r="10" stroke="#dc3545" stroke-width="2" />
+                                    <line x1="8" y1="8" x2="16" y2="16" stroke="#dc3545" stroke-width="2" />
+                                    <line x1="16" y1="8" x2="8" y2="16" stroke="#dc3545" stroke-width="2" />
+                                </svg>
+                            </td>
+                        </tr>
+
+                        <!-- Message -->
+                        <tr>
+                            <td style="padding: 30px; text-align: center;">
+                                <h2 style="margin-top: 0; color: #dc3545;">Oops! Something went wrong.</h2>
+                                <p style="font-size: 16px; line-height: 1.5; color: #333;">
+                                    We couldn’t verify your email address. The verification link may have expired or is
+                                    invalid.
+                                </p>
+                                <p style="font-size: 16px; line-height: 1.5; color: #333;">
+                                    Please try signing up again or contact our support team for help.
+                                </p>
+
+                                <p style="text-align: center; margin: 30px 0;">
+                                    <a href="http://localhost:7000"
+                                        style="background-color: #dc3545; color: white; padding: 12px 24px; text-decoration: none; border-radius: 5px; font-weight: bold;">
+                                        Go Back Home
+                                    </a>
+                                </p>
+                            </td>
+                        </tr>
+
+                        <!-- Footer -->
+                        <%- include('../partials/footer') %>
+                    </table>
+                </td>
+            </tr>
+        </table>
+    </body>
+
+</html>

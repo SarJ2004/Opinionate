@@ -1,0 +1,20 @@
+{
+  "sqltools.connections": [
+    {
+      "pgOptions": {
+        "ssl": {
+          "rejectUnauthorized": false
+        }
+      },
+      "previewLimit": 50,
+      "server": "aws-0-ap-south-1.pooler.supabase.com",
+      "port": 5432,
+      "driver": "PostgreSQL",
+      "name": "Supabase",
+      "username": "postgres.wcwhomzaxtjkwcdpdpmg",
+      "database": "postgres",
+      "password": "notdoppler@y2k"
+    }
+  ],
+  "postman.settings.dotenv-detection-notification-visibility": false
+}
