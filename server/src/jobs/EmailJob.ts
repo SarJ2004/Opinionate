@@ -1,5 +1,5 @@
 import { Job, Queue, Worker } from "bullmq";
-import { defaultQeueueOptions, redisConnection } from "../config/queue.js";
+import { defaultQueueOptions, redisConnection } from "../config/queue.js";
 import { sendEMail } from "../config/mail.js";
 
 interface EmailJobDataType {
@@ -11,7 +11,7 @@ interface EmailJobDataType {
 export const emailQueueName = "emailQueue";
 export const emailQueue = new Queue(emailQueueName, {
   connection: redisConnection,
-  defaultJobOptions: defaultQeueueOptions,
+  defaultJobOptions: defaultQueueOptions,
 });
 
 //WORKER:

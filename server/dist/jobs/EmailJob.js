@@ -1,10 +1,10 @@
 import { Queue, Worker } from "bullmq";
-import { defaultQeueueOptions, redisConnection } from "../config/queue.js";
+import { defaultQueueOptions, redisConnection } from "../config/queue.js";
 import { sendEMail } from "../config/mail.js";
 export const emailQueueName = "emailQueue";
 export const emailQueue = new Queue(emailQueueName, {
     connection: redisConnection,
-    defaultJobOptions: defaultQeueueOptions,
+    defaultJobOptions: defaultQueueOptions,
 });
 //WORKER:
 //takes in a name, and a callback function that will be executed when the job is processed

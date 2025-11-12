@@ -79,19 +79,21 @@ export const loginController = async (req: Request, res: Response) => {
       where: { email: payload.email },
     });
     if (!user || user === null) {
-      return res.status(422).json({
+      res.status(422).json({
         errors: {
           email: "No user found with this email",
         },
       });
+      return;
     }
     const compare = await bcrypt.compare(payload.password, user.password);
     if (!compare) {
-      return res.status(422).json({
+      res.status(422).json({
         errors: {
           email: "Invalid credentials",
         },
       });
+      return;
     }
 
     //JWT PAYLOAD:
@@ -104,13 +106,65 @@ export const loginController = async (req: Request, res: Response) => {
     const token = jwt.sign(JWTPayload, process.env.JWT_SECRET!, {
       expiresIn: "365d",
     });
-    return res.json({
+    res.json({
       message: "Logged in successfully!",
       data: {
         ...JWTPayload,
         token: `Bearer ${token}`,
       },
     });
+    return;
+  } catch (error) {
+    console.log("hi");
+    if (error instanceof ZodError) {
+      console.log(error);
+      res.status(422).json({
+        message: "Validation failed",
+        errors: formatError(error),
+      });
+      return;
+    }
+    res.status(500).json({
+      message: "Something went wrong. Please try again later.",
+      error: error,
+    });
+    return;
+  }
+};
+
+export const credentialCheckController = async (
+  req: Request,
+  res: Response
+) => {
+  try {
+    const body = req.body;
+    const payload = loginSchema.parse(body);
+    let user = await prisma.user.findUnique({
+      where: { email: payload.email },
+    });
+    if (!user || user === null) {
+      res.status(422).json({
+        errors: {
+          email: "No user found with this email",
+        },
+      });
+      return;
+    }
+    const compare = await bcrypt.compare(payload.password, user.password);
+    if (!compare) {
+      res.status(422).json({
+        errors: {
+          email: "Invalid credentials",
+        },
+      });
+      return;
+    }
+
+    res.json({
+      message: "Logged in successfully!",
+      data: {},
+    });
+    return;
   } catch (error) {
     console.log("hi");
     if (error instanceof ZodError) {

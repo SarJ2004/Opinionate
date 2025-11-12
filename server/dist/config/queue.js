@@ -1,11 +1,11 @@
 export const redisConnection = {
     host: process.env.REDIS_HOST,
-    port: Number(process.env.REDIS_PORT) || 6379,
-    username: process.env.REDIS_USERNAME || "default",
-    password: process.env.REDIS_PASSWORD || "",
+    port: Number(process.env.REDIS_PORT),
+    username: "default",
+    password: process.env.REDIS_PASSWORD,
     tls: {},
 };
-export const defaultQeueueOptions = {
+export const defaultQueueOptions = {
     removeOnComplete: {
         count: 20,
         age: 60 * 60,
