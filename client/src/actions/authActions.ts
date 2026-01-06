@@ -41,7 +41,7 @@ export async function registerAction(prevState: any, formData: FormData) {
 
 export async function loginAction(prevState: any, formData: FormData) {
   try {
-    const { data } = await axios.post(LOGIN_URL, {
+    const { data } = await axios.post(CHECK_CREDENTIALS_URL, {
       email: formData.get("email"),
       password: formData.get("password"),
     });

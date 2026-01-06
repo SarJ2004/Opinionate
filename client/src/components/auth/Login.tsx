@@ -39,6 +39,7 @@ function Login() {
         </label>
         <input
           id="email"
+          name="email"
           type="email"
           autoComplete="email"
           required
@@ -55,6 +56,7 @@ function Login() {
         </label>
         <input
           id="password"
+          name="password"
           type="password"
           autoComplete="current-password"
           required

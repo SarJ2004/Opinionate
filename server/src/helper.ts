@@ -3,6 +3,7 @@ import { ZodError } from "zod";
 import ejs from "ejs";
 import path from "path";
 import { fileURLToPath } from "url";
+import moment from "moment";
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
 export const formatError = (error: ZodError): Record<string, string> => {
@@ -29,4 +30,11 @@ export const renderEmailEjs = async (
     payload
   );
   return html;
+};
+
+export const checkHourDiff = (date: Date | string): number => {
+  const now = moment();
+  const tokenSendAt = moment(date);
+  const difference = moment.duration(now.diff(tokenSendAt));
+  return difference.asHours();
 };
