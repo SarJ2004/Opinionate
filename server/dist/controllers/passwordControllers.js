@@ -33,7 +33,7 @@ export const forgetPassController = async (req, res) => {
                 token_send_at: new Date().toISOString(),
             },
         });
-        const url = `${process.env.CLIENT_APP_URL}/reset-password?email=${payload.email}&token=${token}`;
+        const url = `${process.env.CLIENT_APP_URL}/reset-password?email=${payload.email}&token=${encodeURIComponent(token)}`;
         //it will redirect to /reset-password page...with email and token as query params
         const html = await renderEmailEjs("forget-password", { resetLink: url });
         await emailQueue.add(emailQueueName, {
@@ -87,6 +87,16 @@ export const resetPassController = async (req, res) => {
         }
         const hoursDiff = checkHourDiff(user.token_send_at);
         if (hoursDiff > 2) {
+            //remove the expired token
+            await prisma.user.update({
+                where: {
+                    email: payload.email,
+                },
+                data: {
+                    password_reset_token: null,
+                    token_send_at: null,
+                },
+            });
             res.status(422).json({
                 message: "Link expired",
                 errors: {
