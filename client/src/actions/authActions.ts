@@ -121,7 +121,6 @@ export async function resetPasswordAction(prevState: any, formData: FormData) {
       errors: {},
     };
   } catch (error) {
-    console.error(error);
     if (error instanceof AxiosError) {
       if (error.response?.status === 422) {
         return {
@@ -131,6 +130,7 @@ export async function resetPasswordAction(prevState: any, formData: FormData) {
         };
       }
     }
+    console.error(error);
     return {
       status: 500,
       message: "Something went wrong. Please try again!",

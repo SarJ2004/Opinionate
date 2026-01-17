@@ -16,6 +16,8 @@ function ResetPassword() {
   useEffect(() => {
     if (state.status === 500) {
       toast.error(state.message || "An unexpected error occurred.");
+    } else if (state.status === 422) {
+      toast.error(state.message || "Please fix the highlighted errors.");
     } else if (state.status === 200) {
       toast.success(state.message || "Password reset successful");
     }
