@@ -2,6 +2,7 @@
 // server actions are async functions that execute on the server side
 import {
   CHECK_CREDENTIALS_URL,
+  FORGET_PASSWORD_URL,
   LOGIN_URL,
   REGISTER_URL,
 } from "@/lib/apiEndpoints";
@@ -55,6 +56,7 @@ export async function loginAction(prevState: any, formData: FormData) {
       },
     };
   } catch (error) {
+    console.error(error);
     if (error instanceof AxiosError) {
       if (error.response?.status === 422) {
         return {
@@ -70,6 +72,35 @@ export async function loginAction(prevState: any, formData: FormData) {
       message: "Something went wrong.please try again!",
       errors: {},
       data: {},
+    };
+  }
+}
+
+export async function forgetPasswordAction(prevState: any, formData: FormData) {
+  try {
+    const { data } = await axios.post(FORGET_PASSWORD_URL, {
+      email: formData.get("email"),
+    });
+    return {
+      status: 200,
+      message: data?.message ?? "We have mailed you the forget password link!",
+      errors: {},
+    };
+  } catch (error) {
+    console.error(error);
+    if (error instanceof AxiosError) {
+      if (error.response?.status === 422) {
+        return {
+          status: 422,
+          message: error.response?.data?.message,
+          errors: error.response?.data?.errors,
+        };
+      }
+    }
+    return {
+      status: 500,
+      message: "Something went wrong.please try again!",
+      errors: {},
     };
   }
 }

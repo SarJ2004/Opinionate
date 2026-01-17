@@ -67,7 +67,7 @@ function Login() {
 
       <div className="text-right">
         <Link
-          href="/forgot-password"
+          href="/forget-password"
           className="text-sm text-purple-600 hover:text-purple-700 dark:hover:text-purple-400 font-medium">
           Forgot password?
         </Link>
