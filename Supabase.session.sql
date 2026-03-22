@@ -1,1 +1,1 @@
-DELETE FROM "User";
+DELETE FROM "Opinion";

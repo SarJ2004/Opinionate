@@ -6,20 +6,25 @@ import { useActionState } from "react";
 import { resetPasswordAction } from "@/actions/authActions";
 import { toast } from "sonner";
 import { useSearchParams } from "next/navigation";
+import { useRouter } from "next/navigation";
 function ResetPassword() {
   const initState = {
     status: 0,
     message: "",
     errors: {},
   };
+  const router = useRouter();
   const [state, formAction] = useActionState(resetPasswordAction, initState);
   useEffect(() => {
     if (state.status === 500) {
       toast.error(state.message || "An unexpected error occurred.");
     } else if (state.status === 422) {
-      toast.error(state.message || "Please fix the highlighted errors.");
+      toast.error(state.message || "The reset link is invalid or has expired.");
     } else if (state.status === 200) {
       toast.success(state.message || "Password reset successful");
+      setTimeout(() => {
+        router.replace("/login");
+      }, 1000);
     }
   }, [state.status]);
   const searchParams = useSearchParams();

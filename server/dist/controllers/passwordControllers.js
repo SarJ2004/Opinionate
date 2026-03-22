@@ -78,7 +78,7 @@ export const resetPassController = async (req, res) => {
         }
         if (user.password_reset_token !== payload.token) {
             res.status(422).json({
-                message: "Invalid data",
+                message: "Link has expired or is invalid",
                 errors: {
                     email: "Link is invalid, please recheck if you have used the correct link",
                 },

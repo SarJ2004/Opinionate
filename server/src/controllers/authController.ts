@@ -29,7 +29,10 @@ export const registerController = async (req: Request, res: Response) => {
 
     //NOW BEFORE CREATING A USER, WE HAVE TO VERIFY WHETHER THE MAIL IS CORRECT OR NOT
     const verificationToken = await bcrypt.hash(uuidv4(), salt);
-    const url = `${process.env.SERVER_APP_URL}/verify-email?email=${payload.email}&token=${verificationToken}`;
+    const url =
+      `${process.env.SERVER_APP_URL}/verify-email` +
+      `?email=${encodeURIComponent(payload.email)}` +
+      `&token=${encodeURIComponent(verificationToken)}`;
     const emailBody = await renderEmailEjs("verify-email", {
       name: payload.name,
       verificationLink: url,
@@ -51,7 +54,7 @@ export const registerController = async (req: Request, res: Response) => {
 
     res.status(200).json({
       message: "Please check your email to verify your account",
-      data: payload,
+      data: { name: payload.name, email: payload.email },
     });
     return;
   } catch (error) {
@@ -134,7 +137,7 @@ export const loginController = async (req: Request, res: Response) => {
 
 export const credentialCheckController = async (
   req: Request,
-  res: Response
+  res: Response,
 ) => {
   try {
     const body = req.body;
