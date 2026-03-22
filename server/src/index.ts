@@ -9,7 +9,7 @@ import { emailQueue, emailQueueName } from "./jobs/EmailJob.js";
 import Routes from "./routes/index.js";
 import { appLimiter } from "./config/rateLimit.js";
 import fileUpload from "express-fileupload";
-import cloudinary from "./config/cloudinary.js";
+
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const app: Application = express();
 const PORT = process.env.PORT || 7000;

@@ -6,6 +6,7 @@ export const setOpinions = async (req, res) => {
     try {
         const body = req.body;
         const payload = opinionSchema.parse(body);
+        let uploadedImage;
         //check if files exist and are valid images
         if (req.files?.image) {
             const image = req.files.image; //this is either going to be a single file or an array of files.
@@ -18,7 +19,7 @@ export const setOpinions = async (req, res) => {
                 });
                 return;
             }
-            payload.image = await uploadFile(image); //get the public_id of cloudinary image.
+            uploadedImage = await uploadFile(image); //get the public_id of cloudinary image.
         }
         else {
             res.status(422).json({ errors: { image: "Image field is required!" } });
@@ -27,6 +28,7 @@ export const setOpinions = async (req, res) => {
         await prisma.opinion.create({
             data: {
                 ...payload,
+                image: uploadedImage,
                 user_id: req.user?.id,
                 expires_at: new Date(payload.expires_at),
             },
