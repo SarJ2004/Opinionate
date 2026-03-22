@@ -115,7 +115,7 @@ export const loginController = async (req: Request, res: Response) => {
     });
     return;
   } catch (error) {
-    console.log("hi");
+    console.error(error);
     if (error instanceof ZodError) {
       console.log(error);
       res.status(422).json({
