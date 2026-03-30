@@ -1,5 +1,5 @@
 "use client";
-import React, { ChangeEvent, useState } from "react";
+import React, { ChangeEvent, Dispatch, SetStateAction, useState } from "react";
 import {
   Dialog,
   DialogContent,
@@ -27,10 +27,24 @@ import { error } from "console";
 import { toast } from "sonner";
 import { clearCache } from "@/actions/commonActions";
 
-function AddOpinion({ user }: { user: CustomUser }) {
-  const [open, setOpen] = useState(false);
-  const [opinionData, setOpinionData] = useState<OpinionFormType>({});
-  const [date, setDate] = React.useState<Date | null>();
+function EditOpinion({
+  token,
+  opinion,
+  open,
+  setOpen,
+}: {
+  token: string;
+  opinion: OpinionType;
+  open: boolean;
+  setOpen: Dispatch<SetStateAction<boolean>>;
+}) {
+  const [opinionData, setOpinionData] = useState<OpinionFormType>({
+    title: opinion.title,
+    description: opinion.description,
+  });
+  const [date, setDate] = React.useState<Date | null>(
+    new Date(opinion.expires_at),
+  );
   const [image, setImage] = useState<File | null>(null);
   const [loading, setLoading] = useState<boolean>(false);
   const [errors, setErrors] = useState<OpinionFormTypeError>({});
@@ -48,19 +62,23 @@ function AddOpinion({ user }: { user: CustomUser }) {
       formData.append("description", opinionData?.description ?? "");
       formData.append("expires_at", date?.toISOString() ?? "");
       if (image) formData.append("image", image);
-      const { data } = await axios.post(OPINION_URL, formData, {
-        headers: {
-          Authorization: user.token,
+      const { data } = await axios.put(
+        `${OPINION_URL}/${opinion.id}`,
+        formData,
+        {
+          headers: {
+            Authorization: token,
+          },
         },
-      });
+      );
       setLoading(false);
       if (data?.message) {
+        clearCache("dashboard");
         setOpinionData({});
         setDate(null);
         setImage(null);
         setErrors({});
-        toast.success("Opinion added successfully!");
-        clearCache("dashboard");
+        toast.success(data?.message);
         setOpen(false);
       }
     } catch (e) {
@@ -80,7 +98,6 @@ function AddOpinion({ user }: { user: CustomUser }) {
       onOpenChange={(nextOpen) => {
         setOpen(nextOpen);
         if (!nextOpen) {
-          clearCache("dashboard");
           setErrors({});
           setOpinionData({});
           setDate(null);
@@ -157,8 +174,9 @@ function AddOpinion({ user }: { user: CustomUser }) {
                 <Calendar
                   mode="single"
                   selected={date ?? new Date()}
-                  onSelect={setDate}
+                  onSelect={(date) => setDate(date!)}
                   defaultMonth={date ?? new Date()}
+                  autoFocus
                 />
               </PopoverContent>
             </Popover>
@@ -175,4 +193,4 @@ function AddOpinion({ user }: { user: CustomUser }) {
   );
 }
 
-export default AddOpinion;
+export default EditOpinion;
