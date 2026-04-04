@@ -17,4 +17,9 @@ type OpinionType = {
   description: string;
   expires_at: string;
   image: string;
+  created_at: string;
+};
+
+type ClashItemForm = {
+  image: File | null;
 };

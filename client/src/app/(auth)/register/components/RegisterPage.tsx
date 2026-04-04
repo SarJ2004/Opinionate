@@ -1,5 +1,3 @@
-"use client";
-import React, { useState } from "react";
 import Link from "next/link";
 import Register from "@/components/auth/Register";
 import { getServerSession } from "next-auth";

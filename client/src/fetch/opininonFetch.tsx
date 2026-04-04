@@ -22,3 +22,18 @@ export async function fetchOpinions(token: string) {
   }
   return [];
 }
+
+export async function fetchOpinion(id: number) {
+  const res = await fetch(`${OPINION_URL}/${id}`, {
+    cache: "no-cache",
+  });
+  if (!res.ok) {
+    throw new Error("Failed to fetch data");
+  }
+
+  const response = await res.json();
+  if (response?.data) {
+    return response?.data;
+  }
+  return null;
+}
