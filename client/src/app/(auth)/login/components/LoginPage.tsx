@@ -1,8 +1,13 @@
-"use client";
-import React, { useState } from "react";
 import Link from "next/link";
 import Login from "@/components/auth/Login";
-export default function LoginPage() {
+import { getServerSession } from "next-auth";
+import { authOptions } from "@/app/api/auth/[...nextauth]/options";
+import { redirect } from "next/navigation";
+export default async function LoginPage() {
+  const session = await getServerSession(authOptions);
+  if (session) {
+    redirect("/dashboard");
+  }
   return (
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-tr from-purple-100 via-blue-100 to-cyan-100 dark:from-slate-900 dark:via-slate-800 dark:to-slate-900 px-4">
       <div className="max-w-md w-full bg-white dark:bg-slate-800 rounded-xl shadow-lg p-8 space-y-6">

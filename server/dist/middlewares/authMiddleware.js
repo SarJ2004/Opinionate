@@ -20,6 +20,7 @@ const authMiddleware = (req, res, next) => {
                 status: 401,
                 message: "Unauthorized",
             });
+            return;
         }
         req.user = user; //attach user to the request.
         next();

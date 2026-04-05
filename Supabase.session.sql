@@ -1,1 +1,2 @@
-DELETE FROM "User";
+SELECT *
+FROM "OpinionItem";

@@ -1,0 +1,16 @@
+import { Router, Request, Response } from "express";
+import {
+  setOpinions,
+  getOpinions,
+  getOpinion,
+  updateOpinion,
+  deleteOpinion,
+} from "../controllers/opinionController.js";
+import authMiddleware from "../middlewares/authMiddleware.js";
+const router = Router();
+router.get("/", authMiddleware, getOpinions);
+router.get("/:id", getOpinion);
+router.post("/", authMiddleware, setOpinions);
+router.put("/:id", authMiddleware, updateOpinion);
+router.delete("/:id", authMiddleware, deleteOpinion);
+export default router;

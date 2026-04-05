@@ -1,6 +1,10 @@
 class Env {
-  static SERVER_URL: string = process.env.SERVER_APP_URL as string;
-  static CLIENT_URL: string = process.env.CLIENT_APP_URL as string;
+  static SERVER_URL: string =
+    process.env.NEXT_PUBLIC_SERVER_APP_URL || process.env.SERVER_APP_URL || "";
+  static CLIENT_URL: string =
+    process.env.NEXT_PUBLIC_CLIENT_APP_URL || process.env.CLIENT_APP_URL || "";
+  static CLOUDINARY_URL: string =
+    process.env.NEXT_PUBLIC_CLOUDINARY_URL || process.env.CLOUDINARY_URL || "";
 }
 
 export default Env;

@@ -1,0 +1,25 @@
+@baseUrl = http://localhost:7000
+@authToken = Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MywibmFtZSI6IlNhcnRoYWsgSmhhIiwiZW1haWwiOiJwaG9lbml4c2FydGhhazFAZ21haWwuY29tIiwiaWF0IjoxNzczNDM3MjI0LCJleHAiOjE4MDQ5NzMyMjR9.Z7M0GkJw0j7kjb9H62V0yjOL6OhtOczLKKszrgtoVp0
+
+POST {{baseUrl}}/api/opinion
+Authorization: {{authToken}}
+Content-Type: multipart/form-data; boundary=boundary123
+
+--boundary123
+Content-Disposition: form-data; name="title"
+
+Is remote work better than office work?
+--boundary123
+Content-Disposition: form-data; name="description"
+
+Remote work can improve focus and flexibility, but it also requires stronger communication, better planning, and more discipline across the team.
+--boundary123
+Content-Disposition: form-data; name="expires_at"
+
+2026-03-20T18:00:00.000Z
+--boundary123
+Content-Disposition: form-data; name="image"; filename="hi.jpg"
+Content-Type: image/jpeg
+
+< ./hi.jpeg
+--boundary123--

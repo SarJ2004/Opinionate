@@ -23,4 +23,35 @@ model User {
   email_verified_at        DateTime?
   email_verification_token String?
   created_at               DateTime  @default(now())
+  opinions                 Opinion[]
+}
+
+model Opinion {
+  id              Int              @id @default(autoincrement())
+  user            User             @relation(fields: [user_id], references: [id], onDelete: Cascade)
+  user_id         Int
+  title           String
+  description     String
+  image           String
+  expires_at      DateTime
+  created_at      DateTime         @default(now())
+  opinionItems    OpinionItem[]
+  opinionComments OpinionComment[]
+}
+
+model OpinionItem {
+  id         Int      @id @default(autoincrement())
+  opinion    Opinion  @relation(fields: [opinion_id], references: [id], onDelete: Cascade)
+  opinion_id Int
+  image      String
+  count      Int      @default(0)
+  created_at DateTime @default(now())
+}
+
+model OpinionComment {
+  id         Int      @id @default(autoincrement())
+  opinion    Opinion  @relation(fields: [opinion_id], references: [id], onDelete: Cascade)
+  opinion_id Int
+  comment    String
+  created_at DateTime @default(now())
 }
