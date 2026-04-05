@@ -8,6 +8,7 @@ import {
 } from "@/app/api/auth/[...nextauth]/options";
 import { getServerSession } from "next-auth";
 import { redirect } from "next/navigation";
+import ViewOpinionItems from "@/components/opinion/ViewOpinionItems";
 
 async function opinionItems({ params }: { params: { id: string } }) {
   const id = Number((await params).id);
@@ -27,7 +28,11 @@ async function opinionItems({ params }: { params: { id: string } }) {
         </h1>
         <p className="text-lg">{opinion?.description}</p>
       </div>
-      <AddOpinionItem token={session.user.token} opinionId={id} />
+      {opinion?.opinionItems && opinion.opinionItems.length > 0 ? (
+        <ViewOpinionItems opinion={opinion} />
+      ) : (
+        <AddOpinionItem token={session?.user?.token} opinionId={id} />
+      )}
     </div>
   );
 }

@@ -18,8 +18,21 @@ type OpinionType = {
   expires_at: string;
   image: string;
   created_at: string;
+  opinionItems: Array<opinionItem>;
+  opinionComments: Array<opinionComment>;
 };
 
-type ClashItemForm = {
+type OpinionItemForm = {
   image: File | null;
+};
+
+type opinionItem = {
+  id: number;
+  count: number;
+  image: string;
+};
+type opinionComment = {
+  id: number;
+  comment: string;
+  created_at: string;
 };

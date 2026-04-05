@@ -64,6 +64,9 @@ export const getOpinions = async (req: Request, res: Response) => {
       where: {
         user_id: req.user?.id, //auth info is passed on to the request  using authMiddleware..
       },
+      orderBy: {
+        id: "desc",
+      },
     });
     res
       .status(200)
@@ -81,6 +84,28 @@ export const getOpinion = async (req: Request, res: Response) => {
       //we can select specific fields to show, instead of the entire json like only id and desc using select key
       where: {
         id: Number(id),
+      },
+      include: {
+        opinionItems: {
+          orderBy: {
+            id: "desc",
+          },
+          select: {
+            image: true,
+            id: true,
+            count: true,
+          },
+        },
+        opinionComments: {
+          select: {
+            id: true,
+            comment: true,
+            created_at: true,
+          },
+          orderBy: {
+            id: "desc",
+          },
+        },
       },
     });
     res

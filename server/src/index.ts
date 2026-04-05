@@ -9,9 +9,14 @@ import { emailQueue, emailQueueName } from "./jobs/EmailJob.js";
 import Routes from "./routes/index.js";
 import { appLimiter } from "./config/rateLimit.js";
 import fileUpload from "express-fileupload";
-
+import { Server } from "socket.io";
+import { createServer, Server as HTTPServer } from "http";
+import { setupSocket } from "./socket.js";
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
+
 const app: Application = express();
+const server: HTTPServer = createServer(app);
+
 const PORT = process.env.PORT || 7000;
 
 app.set("trust proxy", 1);
@@ -31,6 +36,15 @@ app.use(
     credentials: true,
   }),
 );
+const io = new Server(server, {
+  cors: {
+    origin: allowedOrigins.length ? allowedOrigins : true,
+    credentials: true,
+  },
+});
+
+export { io };
+setupSocket(io);
 //app.use(express.static("public/")) -> serves the content of a particular folder
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
@@ -66,6 +80,6 @@ app.get("/", async (req: Request, res: Response) => {
 
 //QUEUE:
 
-app.listen(PORT, () => {
+server.listen(PORT, () => {
   console.log(`Server is running on http://localhost:${PORT}`);
 });

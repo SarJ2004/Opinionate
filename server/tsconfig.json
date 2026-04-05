@@ -1,6 +1,7 @@
 {
   "compilerOptions": {
-    "rootDirs": ["src"], // only directories here
+    "rootDir": "src",
+    "skipLibCheck": true,
     "outDir": "dist",
     "lib": ["es2020"],
     "target": "es2020",
@@ -10,5 +11,6 @@
     "types": ["node"],
     "strict": true
   },
-  "include": ["src", "src/custom-types.d.ts"] // include your custom types explicitly
+  "include": ["src", "src/custom-types.d.ts"], // include your custom types explicitly
+  "exclude": ["node_modules"]
 }

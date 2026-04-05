@@ -27,16 +27,16 @@ model User {
 }
 
 model Opinion {
-  id            Int             @id @default(autoincrement())
-  user          User            @relation(fields: [user_id], references: [id], onDelete: Cascade)
-  user_id       Int
-  title         String
-  description   String
-  image         String
-  expires_at    DateTime
-  created_at    DateTime        @default(now())
-  opinionItems  OpinionItem[]
-  clashComments ClashComments[]
+  id              Int              @id @default(autoincrement())
+  user            User             @relation(fields: [user_id], references: [id], onDelete: Cascade)
+  user_id         Int
+  title           String
+  description     String
+  image           String
+  expires_at      DateTime
+  created_at      DateTime         @default(now())
+  opinionItems    OpinionItem[]
+  opinionComments OpinionComment[]
 }
 
 model OpinionItem {
@@ -48,9 +48,10 @@ model OpinionItem {
   created_at DateTime @default(now())
 }
 
-model ClashComments {
-  id         Int     @id @default(autoincrement())
-  opinion    Opinion @relation(fields: [opinion_id], references: [id], onDelete: Cascade)
+model OpinionComment {
+  id         Int      @id @default(autoincrement())
+  opinion    Opinion  @relation(fields: [opinion_id], references: [id], onDelete: Cascade)
   opinion_id Int
   comment    String
+  created_at DateTime @default(now())
 }

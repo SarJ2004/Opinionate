@@ -15,7 +15,7 @@ function AddOpinionItems({
   opinionId: number;
 }) {
   const router = useRouter();
-  const [items, setItems] = useState<Array<ClashItemForm>>([
+  const [items, setItems] = useState<Array<OpinionItemForm>>([
     { image: null },
     { image: null },
   ]);

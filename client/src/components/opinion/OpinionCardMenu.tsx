@@ -14,6 +14,7 @@ import {
 import dynamic from "next/dynamic";
 import { CustomUser } from "@/app/api/auth/[...nextauth]/options";
 import DeleteOpinion from "./DeleteOpinion";
+import Env from "@/lib/env";
 
 const EditOpinion = dynamic(() => import("./EditOpinion"));
 
@@ -28,7 +29,8 @@ function OpinionCardMenu({
   const [deleteOpen, setDeleteOpen] = useState(false);
 
   const handleCopyLink = async () => {
-    const link = `${window.location.origin}/dashboard#opinion-${opinion.id}`;
+    navigator.clipboard?.writeText(`${Env.CLIENT_URL}/opinion/${opinion.id}`);
+    toast.success("Link copied succesfully!");
   };
   return (
     <>
