@@ -9,39 +9,39 @@ import { ThumbsUp } from "lucide-react";
 import socket from "@/lib/socket";
 import { Playball } from "next/font/google";
 import { toast } from "sonner";
-function Opinionate({ opinion }: { opinion: OpinionType }) {
-  const [opinionItems, setOpinionItems] = useState(opinion.opinionItems);
-  const [opinionComments, setOpinionComments] = useState(
-    opinion.opinionComments,
+function Verso({ verso }: { verso: VersoType }) {
+  const [versoItems, setVersoItems] = useState(verso.versoItems);
+  const [versoComments, setVersoComments] = useState(
+    verso.versoComments,
   );
   const [comment, setComment] = useState("");
   const [hideVote, setHideVote] = useState(false);
   const handleVote = (id: number) => {
-    if (opinionItems && opinionItems.length > 0) {
+    if (versoItems && versoItems.length > 0) {
       setHideVote(true);
       updateCounter(id);
       //socket list
-      socket.emit(`opinionate-${opinion.id}`, {
-        opinionId: opinion.id,
-        opinionItemId: id,
+      socket.emit(`verso-${verso.id}`, {
+        versoId: verso.id,
+        versoItemId: id,
       }); //dynamically emitting, as we want to update the state of the votes, throughout the user's dashboard too, not across all the components.
     }
   };
 
   const updateCounter = (id: number) => {
-    const items = [...opinionItems];
-    const findIndex = opinionItems.findIndex((item) => item.id === id);
+    const items = [...versoItems];
+    const findIndex = versoItems.findIndex((item) => item.id === id);
     if (findIndex !== -1) {
       items[findIndex].count += 1;
     }
-    setOpinionItems(items);
+    setVersoItems(items);
   };
 
   const updateComment = (payload: any) => {
-    if (opinionComments && opinionComments.length > 0) {
-      setOpinionComments([payload, ...opinionComments]);
+    if (versoComments && versoComments.length > 0) {
+      setVersoComments([payload, ...versoComments]);
     } else {
-      setOpinionComments([payload]);
+      setVersoComments([payload]);
     }
   };
 
@@ -49,12 +49,12 @@ function Opinionate({ opinion }: { opinion: OpinionType }) {
     e.preventDefault();
     if (comment.length > 2) {
       const payload = {
-        id: opinion.id,
+        id: verso.id,
         comment: comment,
         created_at: new Date().toDateString(),
       };
 
-      socket.emit(`opinionate_comment-${opinion.id}`, payload);
+      socket.emit(`verso_comment-${verso.id}`, payload);
       updateComment(payload);
       setComment("");
     } else {
@@ -64,27 +64,27 @@ function Opinionate({ opinion }: { opinion: OpinionType }) {
 
   useEffect(() => {
     const handleCounterUpdate = (data: any) => {
-      updateCounter(data?.opinionItemId);
+      updateCounter(data?.versoItemId);
     };
     
     const handleCommentUpdate = (data: any) => {
       updateComment(data);
     };
 
-    socket.on(`opinionate-${opinion.id}`, handleCounterUpdate);
-    socket.on(`opinionate_comment-${opinion.id}`, handleCommentUpdate);
+    socket.on(`verso-${verso.id}`, handleCounterUpdate);
+    socket.on(`verso_comment-${verso.id}`, handleCommentUpdate);
 
     return () => {
-      socket.off(`opinionate-${opinion.id}`, handleCounterUpdate);
-      socket.off(`opinionate_comment-${opinion.id}`, handleCommentUpdate);
+      socket.off(`verso-${verso.id}`, handleCounterUpdate);
+      socket.off(`verso_comment-${verso.id}`, handleCommentUpdate);
     };
-  }, [opinion.id, opinionItems, opinionComments]); // Make sure dependencies are correctly captured (or handle via functional state updates)
+  }, [verso.id, versoItems, versoComments]); // Make sure dependencies are correctly captured (or handle via functional state updates)
   return (
     <div className="mt-10">
       <div className="flex flex-wrap lg:flex-nowrap justify-between items-center">
-        {opinionItems &&
-          opinionItems.length > 0 &&
-          opinionItems.map((item, index) => {
+        {versoItems &&
+          versoItems.length > 0 &&
+          versoItems.map((item, index) => {
             return (
               <Fragment key={index}>
                 <div className="w-full max-w-[500px]">
@@ -93,7 +93,7 @@ function Opinionate({ opinion }: { opinion: OpinionType }) {
                       src={getImageUrl(item.image)}
                       height={500}
                       width={500}
-                      alt="opinion2"
+                      alt="verso2"
                       className="w-full h-[300px] object-contain"
                     />
                   </div>
@@ -133,9 +133,9 @@ function Opinionate({ opinion }: { opinion: OpinionType }) {
         <Button className="w-full mt-2">Submit Comment</Button>
       </form>
       <div className="mt-4">
-        {opinionComments &&
-          opinionComments.length > 0 &&
-          opinionComments.map((item, index) => (
+        {versoComments &&
+          versoComments.length > 0 &&
+          versoComments.map((item, index) => (
             <div
               className="w-full md:w-[600px] rounded-lg p-4 bg-muted mb-4"
               key={index}>
@@ -148,4 +148,4 @@ function Opinionate({ opinion }: { opinion: OpinionType }) {
   );
 }
 
-export default Opinionate;
+export default Verso;

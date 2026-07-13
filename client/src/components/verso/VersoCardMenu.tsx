@@ -13,43 +13,43 @@ import {
 } from "@/components/ui/dropdown-menu";
 import dynamic from "next/dynamic";
 import { CustomUser } from "@/app/api/auth/[...nextauth]/options";
-import DeleteOpinion from "./DeleteOpinion";
+import DeleteVerso from "./DeleteVerso";
 import Env from "@/lib/env";
 
-const EditOpinion = dynamic(() => import("./EditOpinion"));
+const EditVerso = dynamic(() => import("./EditVerso"));
 
-function OpinionCardMenu({
-  opinion,
+function VersoCardMenu({
+  verso,
   token,
 }: {
-  opinion: OpinionType;
+  verso: VersoType;
   token: string;
 }) {
   const [open, setOpen] = useState(false);
   const [deleteOpen, setDeleteOpen] = useState(false);
 
   const handleCopyLink = async () => {
-    navigator.clipboard?.writeText(`${Env.CLIENT_URL}/opinion/${opinion.id}`);
+    navigator.clipboard?.writeText(`${Env.CLIENT_URL}/verso/${verso.id}`);
     toast.success("Link copied succesfully!");
   };
   return (
     <>
       {open && (
         <Suspense fallback={<p>Loading.....</p>}>
-          <EditOpinion
+          <EditVerso
             open={open}
             setOpen={setOpen}
-            opinion={opinion}
+            verso={verso}
             token={token}
           />
         </Suspense>
       )}
       {deleteOpen && (
         <Suspense fallback={<p>Loading.....</p>}>
-          <DeleteOpinion
+          <DeleteVerso
             open={deleteOpen}
             setOpen={setDeleteOpen}
-            id={opinion.id}
+            id={verso.id}
             token={token}
           />
         </Suspense>
@@ -60,7 +60,7 @@ function OpinionCardMenu({
             variant="ghost"
             size="icon"
             className="size-8 rounded-full"
-            aria-label="Open opinion menu">
+            aria-label="Open verso menu">
             <EllipsisVertical className="size-4" />
           </Button>
         </DropdownMenuTrigger>
@@ -86,4 +86,4 @@ function OpinionCardMenu({
   );
 }
 
-export default OpinionCardMenu;
+export default VersoCardMenu;

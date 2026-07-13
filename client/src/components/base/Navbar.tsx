@@ -26,7 +26,7 @@ function Navbar({ name }: { name?: string }) {
     <>
       <LogoutModal open={open} setOpen={setOpen} />
       <nav className="flex justify-between items-center h-14 p-2 w-full">
-        <div className="text-4xl font-extrabold bg-gradient-to-r">Opinion</div>
+        <div className="text-4xl font-extrabold bg-gradient-to-r">Verso</div>
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <Button variant="ghost" size="icon" className="rounded-full">

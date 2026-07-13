@@ -42,7 +42,7 @@ export const bytesToMB = (bytes) => {
 export const uploadFile = async (image) => {
     try {
         const result = await cloudinary.uploader.upload(image.tempFilePath, {
-            folder: "opinions",
+            folder: "versos",
             public_id: uuidv4(),
         });
         return result.public_id;

@@ -6,6 +6,6 @@ export const CHECK_CREDENTIALS_URL = `${BASE_URL}/auth/check/credentials`;
 export const FORGET_PASSWORD_URL = `${BASE_URL}/auth/forget-password`;
 export const RESET_PASSWORD_URL = `${BASE_URL}/auth/reset-password`;
 
-// Opinion Route
-export const OPINION_URL = `${BASE_URL}/opinion`;
-export const OPINION_ITEMS_URL = `${BASE_URL}/opinion/items`;
+// Verso Route
+export const VERSO_URL = `${BASE_URL}/verso`;
+export const VERSO_ITEMS_URL = `${BASE_URL}/verso/items`;

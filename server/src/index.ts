@@ -74,7 +74,7 @@ app.get("/", async (req: Request, res: Response) => {
   //   subject: "test",
   //   body: html,
   // });
-  res.json({ msg: "Welcome to opinionate!" });
+  res.json({ msg: "Welcome to Verso!" });
   return;
 });
 

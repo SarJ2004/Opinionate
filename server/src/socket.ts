@@ -11,14 +11,14 @@ export function setupSocket(io: Server) {
     //Listen events:
     //socket provides us with a method to listen to any events.
     socket.onAny(async (eventName: string, data: any) => {
-      if (eventName.startsWith("opinionate-")) {
+      if (eventName.startsWith("verso-")) {
         console.log("The vote data is: ", data);
         await votingQueue.add(votingQueueName, data);
-        socket.broadcast.emit(`opinionate-${data?.opinionId}`, data);
-      } else if (eventName.startsWith("opinionate_comment-")) {
+        socket.broadcast.emit(`verso-${data?.versoId}`, data);
+      } else if (eventName.startsWith("verso_comment-")) {
         console.log("The vote data is: ", data);
         await commentQueue.add(commentQueueName, data);
-        socket.broadcast.emit(`opinionate_comment-${data?.id}`, data);
+        socket.broadcast.emit(`verso_comment-${data?.id}`, data);
       }
     });
   });

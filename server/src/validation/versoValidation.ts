@@ -1,7 +1,7 @@
 import { z } from "zod";
 import { string } from "zod/v4";
 
-export const opinionSchema = z.object({
+export const versoSchema = z.object({
   title: z
     .string({ message: "Title is required" })
     .min(3, {

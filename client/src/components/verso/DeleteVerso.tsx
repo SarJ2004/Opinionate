@@ -13,11 +13,11 @@ import {
 } from "@/components/ui/alert-dialog";
 import { DeleteIcon } from "lucide-react";
 import { toast } from "sonner";
-import { OPINION_URL } from "@/lib/apiEndpoints";
+import { VERSO_URL } from "@/lib/apiEndpoints";
 import axios from "axios";
 import { clearCache } from "@/actions/commonActions";
 
-function DeleteOpinion({
+function DeleteVerso({
   open,
   setOpen,
   id,
@@ -29,10 +29,10 @@ function DeleteOpinion({
   token: string;
 }) {
   const [loading, setLoading] = useState(false);
-  const deleteOpinion = async () => {
+  const deleteVerso = async () => {
     try {
       setLoading(true);
-      const { data } = await axios.delete(`${OPINION_URL}/${id}`, {
+      const { data } = await axios.delete(`${VERSO_URL}/${id}`, {
         headers: {
           Authorization: token,
         },
@@ -53,16 +53,16 @@ function DeleteOpinion({
           <AlertDialogMedia className="bg-destructive/10 text-destructive dark:bg-destructive/20 dark:text-destructive">
             <DeleteIcon />
           </AlertDialogMedia>
-          <AlertDialogTitle>Delete Opinion</AlertDialogTitle>
+          <AlertDialogTitle>Delete Verso</AlertDialogTitle>
           <AlertDialogDescription>
-            Are you sure you delete this Opinion?
+            Are you sure you delete this Verso?
           </AlertDialogDescription>
         </AlertDialogHeader>
         <AlertDialogFooter>
           <AlertDialogCancel variant="secondary">Cancel</AlertDialogCancel>
           <AlertDialogAction
             variant="destructive"
-            onClick={deleteOpinion}
+            onClick={deleteVerso}
             disabled={loading}>
             {loading ? "Processing" : "Proceed"}
           </AlertDialogAction>
@@ -72,4 +72,4 @@ function DeleteOpinion({
   );
 }
 
-export default DeleteOpinion;
+export default DeleteVerso;

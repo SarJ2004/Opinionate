@@ -3,7 +3,7 @@ import { FileArray, UploadedFile } from "express-fileupload";
 import { imageValidator, uploadFile } from "../helper.js";
 import prisma from "../config/database.js";
 
-export default async function postOpinionItems(req: Request, res: Response) {
+export default async function postVersoItems(req: Request, res: Response) {
   const { id } = req.body;
   const files: FileArray | null | undefined = req.files;
   let imgErrors: Array<string> = [];
@@ -22,17 +22,17 @@ export default async function postOpinionItems(req: Request, res: Response) {
       images.map((img) => uploadFile(img)),
     );
 
-    await prisma.opinionItem.createMany({
+    await prisma.versoItem.createMany({
       data: uploadedImages.map((image) => ({
         image,
-        opinion_id: Number(id),
+        verso_id: Number(id),
       })),
     });
-    res.status(200).json({ message: "Opinion items updated successfully!" });
+    res.status(200).json({ message: "Verso items updated successfully!" });
   }
 
   res
     .status(422)
-    .json({ errors: ["Please select atleast 2 images to Opinionate"] });
+    .json({ errors: ["Please select atleast 2 images to create a Verso poll"] });
   return;
 }

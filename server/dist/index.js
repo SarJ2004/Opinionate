@@ -56,7 +56,7 @@ app.get("/", async (req, res) => {
     //   subject: "test",
     //   body: html,
     // });
-    res.json({ msg: "Welcome to opinionate!" });
+    res.json({ msg: "Welcome to Verso!" });
     return;
 });
 //QUEUE:

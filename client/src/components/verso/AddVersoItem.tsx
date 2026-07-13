@@ -4,18 +4,18 @@ import React, { useState, useRef, ChangeEvent } from "react";
 import { Button } from "../ui/button";
 import Image from "next/image";
 import axios, { AxiosError } from "axios";
-import { OPINION_ITEMS_URL } from "@/lib/apiEndpoints";
+import { VERSO_ITEMS_URL } from "@/lib/apiEndpoints";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
-function AddOpinionItems({
+function AddVersoItems({
   token,
-  opinionId,
+  versoId,
 }: {
   token: string;
-  opinionId: number;
+  versoId: number;
 }) {
   const router = useRouter();
-  const [items, setItems] = useState<Array<OpinionItemForm>>([
+  const [items, setItems] = useState<Array<VersoItemForm>>([
     { image: null },
     { image: null },
   ]);
@@ -50,14 +50,14 @@ function AddOpinionItems({
 
       setLoading(true);
       const formData = new FormData();
-      formData.append("id", opinionId.toString());
+      formData.append("id", versoId.toString());
       items.forEach((item) => {
         if (item.image) {
           formData.append("images[]", item.image);
         }
       });
       if (formData.get("images[]")) {
-        const { data } = await axios.post(OPINION_ITEMS_URL, formData, {
+        const { data } = await axios.post(VERSO_ITEMS_URL, formData, {
           headers: {
             Authorization: token,
           },
@@ -106,7 +106,7 @@ function AddOpinionItems({
                 src={urls?.[0]}
                 height={500}
                 width={500}
-                alt="opinion2"
+                alt="verso2"
                 className="w-full h-[300px] object-contain"
               />
             ) : (
@@ -137,7 +137,7 @@ function AddOpinionItems({
                 src={urls?.[1]}
                 height={500}
                 width={500}
-                alt="opinion1"
+                alt="verso1"
                 className="w-full h-[300px] object-contain"
               />
             ) : (
@@ -159,4 +159,4 @@ function AddOpinionItems({
   );
 }
 
-export default AddOpinionItems;
+export default AddVersoItems;

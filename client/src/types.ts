@@ -1,16 +1,16 @@
-type OpinionFormType = {
+type VersoFormType = {
   title?: string;
   description?: string;
 };
 
-type OpinionFormTypeError = {
+type VersoFormTypeError = {
   title?: string;
   description?: string;
   expires_at?: string;
   image?: string;
 };
 
-type OpinionType = {
+type VersoType = {
   id: number;
   user_id: number;
   title: string;
@@ -18,20 +18,20 @@ type OpinionType = {
   expires_at: string;
   image: string;
   created_at: string;
-  opinionItems: Array<opinionItem>;
-  opinionComments: Array<opinionComment>;
+  versoItems: Array<versoItem>;
+  versoComments: Array<versoComment>;
 };
 
-type OpinionItemForm = {
+type VersoItemForm = {
   image: File | null;
 };
 
-type opinionItem = {
+type versoItem = {
   id: number;
   count: number;
   image: string;
 };
-type opinionComment = {
+type versoComment = {
   id: number;
   comment: string;
   created_at: string;

@@ -44,7 +44,7 @@ export const registerController = async (req, res) => {
         //SEND THE EMAIL TO THE USER
         await emailQueue.add(emailQueueName, {
             to: payload.email,
-            subject: "Opinionate Email Verification",
+            subject: "Verso Email Verification",
             body: emailBody,
         });
         res.status(200).json({

@@ -21,19 +21,19 @@ import {
 import { format } from "date-fns";
 import { ChevronDownIcon } from "lucide-react";
 import axios, { AxiosError } from "axios";
-import { OPINION_URL } from "@/lib/apiEndpoints";
+import { VERSO_URL } from "@/lib/apiEndpoints";
 import { CustomUser } from "@/app/api/auth/[...nextauth]/options";
 import { error } from "console";
 import { toast } from "sonner";
 import { clearCache } from "@/actions/commonActions";
 
-function AddOpinion({ user }: { user: CustomUser }) {
+function AddVerso({ user }: { user: CustomUser }) {
   const [open, setOpen] = useState(false);
-  const [opinionData, setOpinionData] = useState<OpinionFormType>({});
+  const [versoData, setVersoData] = useState<VersoFormType>({});
   const [date, setDate] = React.useState<Date | null>();
   const [image, setImage] = useState<File | null>(null);
   const [loading, setLoading] = useState<boolean>(false);
-  const [errors, setErrors] = useState<OpinionFormTypeError>({});
+  const [errors, setErrors] = useState<VersoFormTypeError>({});
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target?.files?.[0];
     if (file) setImage(file);
@@ -44,22 +44,22 @@ function AddOpinion({ user }: { user: CustomUser }) {
     try {
       setLoading(true);
       const formData = new FormData();
-      formData.append("title", opinionData?.title ?? "");
-      formData.append("description", opinionData?.description ?? "");
+      formData.append("title", versoData?.title ?? "");
+      formData.append("description", versoData?.description ?? "");
       formData.append("expires_at", date?.toISOString() ?? "");
       if (image) formData.append("image", image);
-      const { data } = await axios.post(OPINION_URL, formData, {
+      const { data } = await axios.post(VERSO_URL, formData, {
         headers: {
           Authorization: user.token,
         },
       });
       setLoading(false);
       if (data?.message) {
-        setOpinionData({});
+        setVersoData({});
         setDate(null);
         setImage(null);
         setErrors({});
-        toast.success("Opinion added successfully!");
+        toast.success("Verso added successfully!");
         clearCache("dashboard");
         setOpen(false);
       }
@@ -82,18 +82,18 @@ function AddOpinion({ user }: { user: CustomUser }) {
         if (!nextOpen) {
           clearCache("dashboard");
           setErrors({});
-          setOpinionData({});
+          setVersoData({});
           setDate(null);
           setImage(null);
         }
       }}>
       <DialogTrigger asChild>
-        <Button>Add Opinion</Button>
+        <Button>Add Verso</Button>
       </DialogTrigger>
       <DialogContent onInteractOutside={(e) => e.preventDefault()}>
         <DialogHeader>
-          <DialogTitle>Create Opinion</DialogTitle>
-          <DialogDescription>Add your opinions here!</DialogDescription>
+          <DialogTitle>Create Verso</DialogTitle>
+          <DialogDescription>Add your versos here!</DialogDescription>
         </DialogHeader>
         <form onSubmit={handleFormSubmit}>
           <div className="mt-4">
@@ -103,9 +103,9 @@ function AddOpinion({ user }: { user: CustomUser }) {
             <Input
               id="title"
               placeholder="Enter your title here:"
-              value={opinionData.title ?? ""}
+              value={versoData.title ?? ""}
               onChange={(e) =>
-                setOpinionData({ ...opinionData, title: e.target.value })
+                setVersoData({ ...versoData, title: e.target.value })
               }
               className="mb-4"
             />
@@ -118,9 +118,9 @@ function AddOpinion({ user }: { user: CustomUser }) {
             <Textarea
               id="description"
               placeholder="Please provide a brief description.."
-              value={opinionData.description ?? ""}
+              value={versoData.description ?? ""}
               onChange={(e) =>
-                setOpinionData({ ...opinionData, description: e.target.value })
+                setVersoData({ ...versoData, description: e.target.value })
               }
               className="mb-4"
             />
@@ -128,7 +128,7 @@ function AddOpinion({ user }: { user: CustomUser }) {
           </div>
           <div className="mt-4">
             <Label htmlFor="image" className="mb-2">
-              Opinion Image
+              Verso Image
             </Label>
             <Input
               id="image"
@@ -175,4 +175,4 @@ function AddOpinion({ user }: { user: CustomUser }) {
   );
 }
 
-export default AddOpinion;
+export default AddVerso;

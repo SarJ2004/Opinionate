@@ -1,8 +1,8 @@
-import { OPINION_URL } from "@/lib/apiEndpoints";
+import { VERSO_URL } from "@/lib/apiEndpoints";
 
-export async function fetchOpinions(token: string) {
+export async function fetchVersos(token: string) {
   // since this is a private route, it would need a token
-  const res = await fetch(OPINION_URL, {
+  const res = await fetch(VERSO_URL, {
     headers: {
       Authorization: token,
     },
@@ -23,8 +23,8 @@ export async function fetchOpinions(token: string) {
   return [];
 }
 
-export async function fetchOpinion(id: number) {
-  const res = await fetch(`${OPINION_URL}/${id}`, {
+export async function fetchVerso(id: number) {
+  const res = await fetch(`${VERSO_URL}/${id}`, {
     cache: "no-cache",
   });
   if (!res.ok) {

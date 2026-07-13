@@ -4,49 +4,49 @@ import Image from "next/image";
 import { getImageUrl } from "@/lib/utils";
 import CountUp from "react-countup";
 import socket from "@/lib/socket";
-function ViewOpinionItems({ opinion }: { opinion: OpinionType }) {
-  const [opinionItems, setOpinionItems] = useState(opinion.opinionItems);
-  const [opinionComments, setOpinionComments] = useState(
-    opinion.opinionComments,
+function ViewVersoItems({ verso }: { verso: VersoType }) {
+  const [versoItems, setVersoItems] = useState(verso.versoItems);
+  const [versoComments, setVersoComments] = useState(
+    verso.versoComments,
   );
   const updateCounter = (id: number) => {
-    const items = [...opinionItems];
-    const findIndex = opinionItems.findIndex((item) => item.id === id);
+    const items = [...versoItems];
+    const findIndex = versoItems.findIndex((item) => item.id === id);
     if (findIndex !== -1) {
       items[findIndex].count += 1;
     }
-    setOpinionItems(items);
+    setVersoItems(items);
   };
   const updateComment = (payload: any) => {
-    if (opinionComments && opinionComments.length > 0) {
-      setOpinionComments([payload, ...opinionComments]);
+    if (versoComments && versoComments.length > 0) {
+      setVersoComments([payload, ...versoComments]);
     } else {
-      setOpinionComments([payload]);
+      setVersoComments([payload]);
     }
   };
   useEffect(() => {
     const handleCounterUpdate = (data: any) => {
-      updateCounter(data?.opinionItemId);
+      updateCounter(data?.versoItemId);
     };
 
     const handleCommentUpdate = (data: any) => {
       updateComment(data);
     };
 
-    socket.on(`opinionate-${opinion.id}`, handleCounterUpdate);
-    socket.on(`opinionate_comment-${opinion.id}`, handleCommentUpdate);
+    socket.on(`verso-${verso.id}`, handleCounterUpdate);
+    socket.on(`verso_comment-${verso.id}`, handleCommentUpdate);
 
     return () => {
-      socket.off(`opinionate-${opinion.id}`, handleCounterUpdate);
-      socket.off(`opinionate_comment-${opinion.id}`, handleCommentUpdate);
+      socket.off(`verso-${verso.id}`, handleCounterUpdate);
+      socket.off(`verso_comment-${verso.id}`, handleCommentUpdate);
     };
-  }, [opinion.id, opinionItems, opinionComments]);
+  }, [verso.id, versoItems, versoComments]);
   return (
     <div className="mt-10">
       <div className="flex flex-wrap lg:flex-nowrap justify-between items-center">
-        {opinionItems &&
-          opinionItems.length > 0 &&
-          opinionItems.map((item, index) => {
+        {versoItems &&
+          versoItems.length > 0 &&
+          versoItems.map((item, index) => {
             return (
               <Fragment key={index}>
                 <div className="w-full max-w-[500px]">
@@ -55,7 +55,7 @@ function ViewOpinionItems({ opinion }: { opinion: OpinionType }) {
                       src={getImageUrl(item.image)}
                       height={500}
                       width={500}
-                      alt="opinion2"
+                      alt="verso2"
                       className="w-full h-[300px] object-contain"
                     />
                   </div>
@@ -76,9 +76,9 @@ function ViewOpinionItems({ opinion }: { opinion: OpinionType }) {
           })}
       </div>
       <div className="mt-4">
-        {opinionComments &&
-          opinionComments.length > 0 &&
-          opinionComments.map((item, index) => (
+        {versoComments &&
+          versoComments.length > 0 &&
+          versoComments.map((item, index) => (
             <div
               className="w-full md:w-[600px] rounded-lg p-4 bg-muted mb-4"
               key={index}>
@@ -91,4 +91,4 @@ function ViewOpinionItems({ opinion }: { opinion: OpinionType }) {
   );
 }
 
-export default ViewOpinionItems;
+export default ViewVersoItems;

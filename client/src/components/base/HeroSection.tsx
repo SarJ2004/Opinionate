@@ -17,7 +17,7 @@ function HeroSection() {
 
         <div className="flex flex-col items-center mt-2">
           <h1 className="text-5xl md:text-6xl font-extrabold tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-purple-600 via-blue-500 to-cyan-400 drop-shadow-2xl font-display">
-            Opinionate
+            Verso
           </h1>
           <div className="w-24 md:w-32 h-1 bg-gradient-to-r from-purple-400 to-blue-400 rounded-full mt-4 mb-6"></div>
           <p className="text-lg md:text-2xl text-gray-800 dark:text-gray-300 font-medium italic drop-shadow-sm max-w-xl">

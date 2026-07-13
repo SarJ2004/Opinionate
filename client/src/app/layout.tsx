@@ -14,8 +14,8 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Opinionate",
-  description: "Add the mix of opinions to your life",
+  title: "Verso",
+  description: "Add the mix of versos to your life",
 };
 
 export default function RootLayout({

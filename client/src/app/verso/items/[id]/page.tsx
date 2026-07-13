@@ -1,18 +1,18 @@
 import React from "react";
 import Navbar from "@/components/base/Navbar";
-import { fetchOpinion } from "@/fetch/opininonFetch";
-import AddOpinionItem from "@/components/opinion/AddOpinionItem";
+import { fetchVerso } from "@/fetch/versoFetch";
+import AddVersoItem from "@/components/verso/AddVersoItem";
 import {
   authOptions,
   CustomSession,
 } from "@/app/api/auth/[...nextauth]/options";
 import { getServerSession } from "next-auth";
 import { redirect } from "next/navigation";
-import ViewOpinionItems from "@/components/opinion/ViewOpinionItems";
+import ViewVersoItems from "@/components/verso/ViewVersoItems";
 
-async function opinionItems({ params }: { params: { id: string } }) {
+async function AddItem({ params }: { params: Promise<{ id: string }> }) {
   const id = Number((await params).id);
-  const opinion: OpinionType | null = await fetchOpinion(id);
+  const verso: VersoType | null = await fetchVerso(id);
   const session: CustomSession | null = await getServerSession(authOptions);
 
   if (!session?.user?.token) {
@@ -24,17 +24,17 @@ async function opinionItems({ params }: { params: { id: string } }) {
       <Navbar />
       <div className="mt-4">
         <h1 className="text-2xl lg:text-4xl font-extrabold">
-          {opinion?.title}
+          {verso?.title}
         </h1>
-        <p className="text-lg">{opinion?.description}</p>
+        <p className="text-lg">{verso?.description}</p>
       </div>
-      {opinion?.opinionItems && opinion.opinionItems.length > 0 ? (
-        <ViewOpinionItems opinion={opinion} />
+      {verso?.versoItems && verso.versoItems.length > 0 ? (
+        <ViewVersoItems verso={verso} />
       ) : (
-        <AddOpinionItem token={session?.user?.token} opinionId={id} />
+        <AddVersoItem token={session?.user?.token} versoId={id} />
       )}
     </div>
   );
 }
 
-export default opinionItems;
+export default AddItem;

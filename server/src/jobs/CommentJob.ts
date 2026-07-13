@@ -16,10 +16,10 @@ export const commentWorker = new Worker(
   commentQueueName,
   async (job: Job) => {
     const data = await job.data;
-    await prisma.opinionComment.create({
+    await prisma.versoComment.create({
       data: {
         comment: data?.comment,
-        opinion_id: Number(data?.id),
+        verso_id: Number(data?.id),
       },
     });
   },
