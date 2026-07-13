@@ -3,6 +3,7 @@ import {
   registerController,
   loginController,
   credentialCheckController,
+  googleLoginController,
 } from "../controllers/authController.js";
 
 import authMiddleware from "../middlewares/authMiddleware.js";
@@ -13,6 +14,8 @@ const router = Router();
 router.post("/register", authLimiter, registerController);
 //LOGIN
 router.post("/login", authLimiter, loginController);
+//GOOGLE LOGIN
+router.post("/google-login", authLimiter, googleLoginController);
 
 //LOGIN CHECK ROUTE
 router.post("/check/credentials", authLimiter, credentialCheckController);

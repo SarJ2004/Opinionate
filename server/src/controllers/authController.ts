@@ -1,6 +1,6 @@
 import { ZodError } from "zod";
 import { formatError } from "../helper.js";
-import { loginSchema, registerSchema } from "../validation/authValidation.js";
+import { loginSchema, registerSchema, googleLoginSchema } from "../validation/authValidation.js";
 import { Request, Response } from "express";
 import prisma from "../config/database.js";
 import bcrypt from "bcrypt";
@@ -174,6 +174,75 @@ export const credentialCheckController = async (
     console.log("hi");
     if (error instanceof ZodError) {
       console.log(error);
+      res.status(422).json({
+        message: "Validation failed",
+        errors: formatError(error),
+      });
+      return;
+    }
+    res.status(500).json({
+      message: "Something went wrong. Please try again later.",
+    });
+    return;
+  }
+};
+
+export const googleLoginController = async (req: Request, res: Response) => {
+  try {
+    const body = req.body;
+    const payload = googleLoginSchema.parse(body);
+
+    let user = await prisma.user.findUnique({
+      where: { email: payload.email },
+    });
+
+    if (!user) {
+      // User doesn't exist, create a new Google user
+      user = await prisma.user.create({
+        data: {
+          name: payload.name,
+          email: payload.email,
+          provider: payload.provider,
+          oauth_id: payload.oauth_id,
+          email_verified_at: new Date(), // Google users are pre-verified
+        },
+      });
+    } else {
+      // If user exists but provider isn't set, link it
+      if (user.provider !== payload.provider || !user.oauth_id) {
+        user = await prisma.user.update({
+          where: { email: payload.email },
+          data: {
+            provider: payload.provider,
+            oauth_id: payload.oauth_id,
+            email_verified_at: user.email_verified_at || new Date(),
+          },
+        });
+      }
+    }
+
+    // JWT PAYLOAD
+    const JWTPayload = {
+      id: user.id,
+      name: user.name,
+      email: user.email,
+    };
+
+    const token = jwt.sign(JWTPayload, process.env.JWT_SECRET!, {
+      expiresIn: "365d",
+    });
+
+    res.json({
+      message: "Logged in successfully with Google!",
+      data: {
+        ...JWTPayload,
+        token: `Bearer ${token}`,
+      },
+    });
+    return;
+  } catch (error) {
+    console.error(error);
+    if (error instanceof ZodError) {
       res.status(422).json({
         message: "Validation failed",
         errors: formatError(error),
