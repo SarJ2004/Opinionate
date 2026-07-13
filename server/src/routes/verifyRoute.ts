@@ -1,4 +1,5 @@
 import { Router, Request, Response } from "express";
+import bcrypt from "bcrypt"
 import prisma from "../config/database.js";
 const router = Router();
 
@@ -12,7 +13,8 @@ router.get("/verify-email", async (req: Request, res: Response) => {
       },
     });
     if (user) {
-      if (token === user.email_verification_token) {
+      const isValid = await bcrypt.compare(token, user.email_verification_token!);
+      if (isValid) {
         //Redirect to front page
         await prisma.user.update({
           where: {

@@ -24,27 +24,28 @@ export const registerController = async (req, res) => {
         const salt = await bcrypt.genSalt(10);
         payload.password = await bcrypt.hash(payload.password, salt);
         //NOW BEFORE CREATING A USER, WE HAVE TO VERIFY WHETHER THE MAIL IS CORRECT OR NOT
-        const verificationToken = await bcrypt.hash(uuidv4(), salt);
+        const plainToken = uuidv4();
+        const hashedToken = await bcrypt.hash(plainToken, salt);
         const url = `${process.env.SERVER_APP_URL}/verify-email` +
             `?email=${encodeURIComponent(payload.email)}` +
-            `&token=${encodeURIComponent(verificationToken)}`;
+            `&token=${encodeURIComponent(plainToken)}`;
         const emailBody = await renderEmailEjs("verify-email", {
             name: payload.name,
             verificationLink: url,
-        });
-        //SEND THE EMAIL TO THE USER
-        await emailQueue.add(emailQueueName, {
-            to: payload.email,
-            subject: "Opinionate Email Verification",
-            body: emailBody,
         });
         await prisma.user.create({
             data: {
                 name: payload.name,
                 email: payload.email,
                 password: payload.password,
-                email_verification_token: verificationToken,
+                email_verification_token: hashedToken,
             },
+        });
+        //SEND THE EMAIL TO THE USER
+        await emailQueue.add(emailQueueName, {
+            to: payload.email,
+            subject: "Opinionate Email Verification",
+            body: emailBody,
         });
         res.status(200).json({
             message: "Please check your email to verify your account",
@@ -63,7 +64,6 @@ export const registerController = async (req, res) => {
         }
         res.status(500).json({
             message: "Something went wrong. Please try again later.",
-            error: error,
         });
         return;
     }
@@ -122,7 +122,6 @@ export const loginController = async (req, res) => {
         }
         res.status(500).json({
             message: "Something went wrong. Please try again later.",
-            error: error,
         });
         return;
     }
@@ -169,7 +168,6 @@ export const credentialCheckController = async (req, res) => {
         }
         res.status(500).json({
             message: "Something went wrong. Please try again later.",
-            error: error,
         });
         return;
     }

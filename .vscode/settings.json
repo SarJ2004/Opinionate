@@ -14,6 +14,14 @@
       "username": "postgres.wcwhomzaxtjkwcdpdpmg",
       "database": "postgres",
       "password": "notdoppler@y2k"
+    },
+    {
+      "ssh": "Disabled",
+      "previewLimit": 50,
+      "server": "localhost",
+      "driver": "PostgreSQL",
+      "connectString": "postgresql://postgres.lguvylgqdknmlgumyiva:notdoppler%40y2k@aws-1-ap-south-1.pooler.supabase.com:5432/postgres",
+      "name": "Opinion"
     }
   ],
   "postman.settings.dotenv-detection-notification-visibility": false,
