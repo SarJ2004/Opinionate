@@ -177,9 +177,28 @@ function EditVerso({
                   onSelect={(date) => setDate(date!)}
                   defaultMonth={date ?? new Date()}
                   autoFocus
+                  disabled={(d) => d < new Date(new Date().setHours(0, 0, 0, 0))}
                 />
               </PopoverContent>
             </Popover>
+            <div className="flex gap-2 mt-2">
+              <Button
+                type="button"
+                variant="outline"
+                size="sm"
+                onClick={() => setDate(new Date(Date.now() + 60 * 60 * 1000))}
+              >
+                1 Hour Flash Poll
+              </Button>
+              <Button
+                type="button"
+                variant="outline"
+                size="sm"
+                onClick={() => setDate(new Date(Date.now() + 24 * 60 * 60 * 1000))}
+              >
+                24 Hours
+              </Button>
+            </div>
             <span className="text-red-500">{errors?.expires_at}</span>
           </div>
           <div className="mt-4">

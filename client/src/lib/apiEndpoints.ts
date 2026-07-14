@@ -10,3 +10,4 @@ export const RESET_PASSWORD_URL = `${BASE_URL}/auth/reset-password`;
 // Verso Route
 export const VERSO_URL = `${BASE_URL}/verso`;
 export const VERSO_ITEMS_URL = `${BASE_URL}/verso/items`;
+export const TRENDING_VERSO_URL = `${BASE_URL}/verso/trending`;

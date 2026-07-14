@@ -9,6 +9,7 @@ import {
 } from "../helper.js";
 import prisma from "../config/database.js";
 import { UploadedFile } from "express-fileupload";
+import { pollExpiryQueue, pollExpiryQueueName } from "../jobs/ExpiryJob.js";
 export const setVersos = async (req: Request, res: Response) => {
   try {
     const body = req.body;
@@ -31,7 +32,7 @@ export const setVersos = async (req: Request, res: Response) => {
       res.status(422).json({ errors: { image: "Image field is required!" } });
       return;
     }
-    await prisma.verso.create({
+    const verso = await prisma.verso.create({
       data: {
         ...payload,
         image: uploadedImage,
@@ -39,6 +40,15 @@ export const setVersos = async (req: Request, res: Response) => {
         expires_at: new Date(payload.expires_at),
       },
     });
+
+    const delay = new Date(payload.expires_at).getTime() - Date.now();
+    if (delay > 0) {
+      await pollExpiryQueue.add(
+        pollExpiryQueueName,
+        { versoId: verso.id },
+        { delay }
+      );
+    }
     res.status(201).json({ message: "Verso created successfully!" });
     return;
   } catch (error) {

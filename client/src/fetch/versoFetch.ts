@@ -1,4 +1,4 @@
-import { VERSO_URL } from "@/lib/apiEndpoints";
+import { VERSO_URL, TRENDING_VERSO_URL } from "@/lib/apiEndpoints";
 
 export async function fetchVersos(token: string) {
   // since this is a private route, it would need a token
@@ -36,4 +36,19 @@ export async function fetchVerso(id: number) {
     return response?.data;
   }
   return null;
+}
+
+export async function fetchTrendingVersos() {
+  const res = await fetch(TRENDING_VERSO_URL, {
+    cache: "no-store", // Don't cache trending as it changes every minute
+  });
+  if (!res.ok) {
+    throw new Error("Failed to fetch trending data");
+  }
+
+  const response = await res.json();
+  if (response?.data) {
+    return response?.data;
+  }
+  return [];
 }
