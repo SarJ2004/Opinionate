@@ -9,13 +9,20 @@ import { ThumbsUp } from "lucide-react";
 import socket from "@/lib/socket";
 import { Playball } from "next/font/google";
 import { toast } from "sonner";
-function Verso({ verso }: { verso: VersoType }) {
+import { Users, Activity } from "lucide-react";
+
+function Verso({ verso, userName }: { verso: VersoType; userName: string }) {
   const [versoItems, setVersoItems] = useState(verso.versoItems);
   const [versoComments, setVersoComments] = useState(
     verso.versoComments,
   );
   const [comment, setComment] = useState("");
   const [hideVote, setHideVote] = useState(false);
+  const [viewerCount, setViewerCount] = useState(0);
+  const [typingUsers, setTypingUsers] = useState<string[]>([]);
+  
+  // Track typing timeout for debouncing
+  const [typingTimeout, setTypingTimeout] = useState<NodeJS.Timeout | null>(null);
   const handleVote = (id: number) => {
     if (versoItems && versoItems.length > 0) {
       setHideVote(true);
@@ -71,16 +78,65 @@ function Verso({ verso }: { verso: VersoType }) {
       updateComment(data);
     };
 
+    const handleViewerCount = (count: number) => {
+      setViewerCount(count);
+    };
+
+    const handleTypingUpdate = (data: { name: string; isTyping: boolean }) => {
+      setTypingUsers((prev) => {
+        if (data.isTyping) {
+          if (!prev.includes(data.name)) return [...prev, data.name];
+          return prev;
+        } else {
+          return prev.filter((name) => name !== data.name);
+        }
+      });
+    };
+
+    socket.emit("join_verso", verso.id);
+
     socket.on(`verso-${verso.id}`, handleCounterUpdate);
     socket.on(`verso_comment-${verso.id}`, handleCommentUpdate);
+    socket.on(`viewer_count_${verso.id}`, handleViewerCount);
+    socket.on(`typing_update_${verso.id}`, handleTypingUpdate);
 
     return () => {
+      socket.emit("leave_verso", verso.id);
       socket.off(`verso-${verso.id}`, handleCounterUpdate);
       socket.off(`verso_comment-${verso.id}`, handleCommentUpdate);
+      socket.off(`viewer_count_${verso.id}`, handleViewerCount);
+      socket.off(`typing_update_${verso.id}`, handleTypingUpdate);
     };
-  }, [verso.id, versoItems, versoComments]); // Make sure dependencies are correctly captured (or handle via functional state updates)
+  }, [verso.id]);
+
+  const handleCommentChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+    setComment(e.target.value);
+
+    // Clear existing timeout
+    if (typingTimeout) clearTimeout(typingTimeout);
+
+    // Emit typing event
+    socket.emit("typing", { versoId: verso.id, name: userName });
+
+    // Set new timeout to stop typing after 1.5s
+    const timeout = setTimeout(() => {
+      socket.emit("stop_typing", { versoId: verso.id, name: userName });
+    }, 1500);
+    setTypingTimeout(timeout);
+  };
   return (
     <div className="mt-10">
+      {viewerCount > 0 && (
+        <div className="flex items-center gap-2 mb-6 text-red-500 bg-red-500/10 w-fit px-4 py-2 rounded-full border border-red-500/20">
+          <span className="relative flex h-3 w-3">
+            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-400 opacity-75"></span>
+            <span className="relative inline-flex rounded-full h-3 w-3 bg-red-500"></span>
+          </span>
+          <span className="font-semibold text-sm">
+            🔥 {viewerCount} {viewerCount === 1 ? "person is" : "people are"} viewing this poll right now
+          </span>
+        </div>
+      )}
       <div className="flex flex-wrap lg:flex-nowrap justify-between items-center">
         {versoItems &&
           versoItems.length > 0 &&
@@ -124,11 +180,23 @@ function Verso({ verso }: { verso: VersoType }) {
           })}
       </div>
 
-      <form className="mt-4 w-full" onSubmit={handleSubmit}>
+      <form className="mt-8 w-full" onSubmit={handleSubmit}>
+        <div className="mb-2 h-6 text-sm text-muted-foreground flex items-center gap-2 italic">
+          {typingUsers.length > 0 && (
+            <>
+              <Activity className="w-4 h-4 animate-pulse text-primary" />
+              {typingUsers.length === 1 
+                ? `${typingUsers[0]} is typing a comment...`
+                : typingUsers.length === 2
+                  ? `${typingUsers[0]} and ${typingUsers[1]} are typing...`
+                  : `Multiple people are typing...`}
+            </>
+          )}
+        </div>
         <Textarea
           placeholder="Type your suggestions"
           value={comment}
-          onChange={(e) => setComment(e.target.value)}
+          onChange={handleCommentChange}
         />
         <Button className="w-full mt-2">Submit Comment</Button>
       </form>
